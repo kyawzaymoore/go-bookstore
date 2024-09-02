@@ -1,0 +1,14 @@
+{
+    "server": {
+      "port": 8080,
+      "host": "localhost"
+    },
+    "database": {
+      "driver": "mysql",
+      "connectionString":"your-username:your-password@tcp(localhost:3306)/bookstore?charset=utf8&parseTime=True&loc=Local"
+    },
+    "app": {
+      "secretKey": "fido-golang-key"
+    }
+  }
+  

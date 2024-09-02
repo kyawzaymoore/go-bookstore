@@ -1,0 +1,453 @@
+basePath: /
+definitions:
+  models.SwaggerCategory:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.User:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      registerDate:
+        type: string
+      username:
+        type: string
+    type: object
+  request.BookRequest:
+    properties:
+      author:
+        type: string
+      categoryId:
+        type: integer
+      name:
+        type: string
+      publication:
+        type: string
+    type: object
+  request.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.UserRequest:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  response.BookResponse:
+    properties:
+      author:
+        type: string
+      category:
+        $ref: '#/definitions/response.CategoryResponse'
+      id:
+        type: integer
+      name:
+        type: string
+      publication:
+        type: string
+    type: object
+  response.CategoryResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  response.ProfileResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      username:
+        type: string
+    type: object
+  response.ResponseModel-array_models_SwaggerCategory:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/models.SwaggerCategory'
+        type: array
+      message:
+        type: string
+    type: object
+  response.ResponseModel-array_response_BookResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/response.BookResponse'
+        type: array
+      message:
+        type: string
+    type: object
+  response.ResponseModel-models_SwaggerCategory:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/models.SwaggerCategory'
+      message:
+        type: string
+    type: object
+  response.ResponseModel-models_User:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/models.User'
+      message:
+        type: string
+    type: object
+  response.ResponseModel-response_BookResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/response.BookResponse'
+      message:
+        type: string
+    type: object
+  response.ResponseModel-response_ProfileResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/response.ProfileResponse'
+      message:
+        type: string
+    type: object
+  response.ResponseModel-response_TokenResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/response.TokenResponse'
+      message:
+        type: string
+    type: object
+  response.TokenResponse:
+    properties:
+      accessToken:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for a bookstore.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Go Bookstore API
+  version: "1.0"
+paths:
+  /auth/signin:
+    post:
+      consumes:
+      - application/json
+      description: Log in a user with username and password
+      parameters:
+      - description: User login details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-response_TokenResponse'
+      security:
+      - BasicAuth: []
+      summary: Login an existing user
+      tags:
+      - Auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with username and password
+      parameters:
+      - description: User registration details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-models_User'
+      security:
+      - BasicAuth: []
+      summary: Register a new user
+      tags:
+      - Auth
+  /book:
+    get:
+      consumes:
+      - application/json
+      description: Get Book List
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-array_response_BookResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Book List
+      tags:
+      - Book
+    post:
+      consumes:
+      - application/json
+      description: Create Book
+      parameters:
+      - description: Book model
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/request.BookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-response_BookResponse'
+      security:
+      - BearerAuth: []
+      summary: Create Book
+      tags:
+      - Book
+  /book/{bookId}:
+    delete:
+      description: Delete Book By ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: bookId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Delete Book By ID
+      tags:
+      - Book
+    get:
+      description: Get Book By ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: bookId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-response_BookResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Book By ID
+      tags:
+      - Book
+    put:
+      consumes:
+      - application/json
+      description: Update book
+      parameters:
+      - description: Book ID
+        in: path
+        name: bookId
+        required: true
+        type: string
+      - description: Book data
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/request.BookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-response_BookResponse'
+      security:
+      - BearerAuth: []
+      summary: Update book
+      tags:
+      - Book
+  /category:
+    get:
+      consumes:
+      - application/json
+      description: Get Category List
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-array_models_SwaggerCategory'
+      security:
+      - BearerAuth: []
+      summary: Get Category List
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Create category
+      parameters:
+      - description: Category model
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwaggerCategory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-models_SwaggerCategory'
+      security:
+      - BearerAuth: []
+      summary: Create category
+      tags:
+      - Category
+  /category/{categoryId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-array_models_SwaggerCategory'
+      security:
+      - BearerAuth: []
+      summary: Delete Category
+      tags:
+      - Category
+    get:
+      description: Get Category By ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-models_SwaggerCategory'
+      security:
+      - BearerAuth: []
+      summary: Get Category By ID
+      tags:
+      - Category
+    put:
+      consumes:
+      - application/json
+      description: Update category
+      parameters:
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: string
+      - description: Category data
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwaggerCategory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-models_SwaggerCategory'
+      security:
+      - BearerAuth: []
+      summary: Update category
+      tags:
+      - Category
+  /profile:
+    get:
+      consumes:
+      - application/json
+      description: Get Profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseModel-response_ProfileResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Profile
+      tags:
+      - Profile
+securityDefinitions:
+  BasicAuth:
+    type: basic
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
